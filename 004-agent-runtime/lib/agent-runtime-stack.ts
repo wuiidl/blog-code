@@ -19,9 +19,13 @@ export class AgentRuntimeStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // Default VPC keeps the example small. Replace with an explicit VPC if
-    // you prefer, or put the instance in a private subnet with SSM/SSM
-    // Messages/EC2 Messages VPC endpoints for tighter network isolation.
+    // Default VPC keeps the example small. The instance sits in a public
+    // subnet; SSM reaches the control channel via the attached IGW.
+    //
+    // If you want the instance in a private subnet, you must add VPC
+    // endpoints for `ssm`, `ssmmessages`, and `ec2messages`. Without those
+    // endpoints SSM Session Manager cannot connect — a private-subnet
+    // instance with no IGW and no endpoints is unreachable.
     const vpc = ec2.Vpc.fromLookup(this, "DefaultVpc", { isDefault: true });
 
     // Security group: no inbound, outbound on 80/443 only. HTTPS is needed
