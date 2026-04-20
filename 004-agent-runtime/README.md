@@ -3,6 +3,12 @@
 Companion to the post *The box is the trust boundary* on
 [waltergugenberger.com](https://waltergugenberger.com).
 
+> **Not a security review.** I'm not a security professional. This is
+> the hardening I apply to my own box, documented. See the repo
+> [README](../README.md#disclaimer) for the full disclaimer and the
+> `Further hardening` section below for what's missing that I know
+> about.
+
 A minimal CDK stack for a hardened EC2 instance designed to run an
 autonomous process (AI coding agent, long-running automation,
 anything with real credentials). The point: seal the box, and you
@@ -144,6 +150,48 @@ sudo -iu agent
 ```
 
 No SSH key needed. No port open. No password.
+
+## Running long-lived workloads (tmux)
+
+SSM Session Manager sessions time out. If you start a long Claude
+Code task and get disconnected, the process dies with the session.
+Wrap the work in `tmux` so it survives.
+
+Install once per instance:
+
+```sh
+sudo dnf install -y tmux
+```
+
+Start a named session and run whatever inside it:
+
+```sh
+tmux new -s claude
+# inside tmux:
+claude        # or any long-running agent / script
+```
+
+Detach with `Ctrl-b` then `d`. The process keeps running. When you
+come back — even after closing your laptop, hours or days later —
+reconnect via SSM and reattach:
+
+```sh
+aws ssm start-session --target <instance-id>
+sudo -iu agent
+tmux attach -t claude
+```
+
+The tmux session lives on the box, not in your SSM session. That's
+the whole point. Your laptop can go anywhere; the agent keeps
+thinking.
+
+**tmux vs systemd.** tmux is the "I log in, start work, come back
+later" pattern. Fine for iterative development. For a workload that
+should always be running — picking up queued jobs, listening for
+webhooks — write a systemd unit instead. The tradeoff: systemd gives
+you reliability and automatic restart, but you lose the interactive
+"attach and watch it think" that tmux offers. Use whichever fits the
+workload. I use tmux on my own remote box for most things.
 
 ## Destroy
 

@@ -2,6 +2,24 @@
 
 Working code examples referenced from [waltergugenberger.com](https://waltergugenberger.com).
 
+## Disclaimer
+
+I'm a software engineer, not a security professional. These examples
+come from patterns I use on my own projects, documented so anyone
+following along has something concrete to fork. They are **not** a
+substitute for a real security review and they are **not**
+comprehensive.
+
+Every example here is a reasonable starting floor, not a ceiling.
+Before trusting any of this with real credentials, production data,
+or anything you can't afford to lose, get it reviewed by someone with
+deeper security experience than mine. The `Further hardening` section
+in each folder calls out what's missing that I know about; there's
+almost certainly more I don't. If you spot a gap, open an issue.
+
+---
+
+
 Each post that talks about real infrastructure or patterns has a folder here with a minimal, deployable example. The examples are intentionally generic: no personal AWS accounts, no private account IDs, no secrets. Fork, fill in your own context, deploy.
 
 ## Layout
