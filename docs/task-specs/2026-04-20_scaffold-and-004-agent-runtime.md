@@ -9,16 +9,6 @@ Stand up the `blog-code` public repo and populate its first example: a
 minimal hardened-EC2 CDK stack that pairs with the post
 *The box is the trust boundary*.
 
-## Out of scope
-
-- Copying any code from `remote-claude` (private). The example here
-  is written fresh, generic, and safe to publish.
-- Adding scheduled start/stop, SSM Parameter Store credential
-  bootstrap, or VPC endpoints. Mentioned in the folder README as
-  follow-ups, not built.
-- Anything for posts 001–003. They're either already published or
-  don't have companion code.
-
 ## Deliverables
 
 Repo root:
