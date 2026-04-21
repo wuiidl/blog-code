@@ -1,0 +1,22 @@
+node_modules/
+dist/
+cdk.out/
+.cdk.staging/
+
+# editor / os
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# env
+.env
+.env.local
+.env.*.local
