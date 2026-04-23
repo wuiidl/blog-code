@@ -4,18 +4,17 @@ import * as iam from "aws-cdk-lib/aws-iam";
 import { Construct } from "constructs";
 
 /**
- * Hardened EC2 runtime for running an autonomous process.
+ * Minimal cloud setup for a remote coding agent.
  *
- * Seals the box so you stop needing to trust whatever's running inside it
- * moment-to-moment. The process gets its own unprivileged user, no network
- * inbound, outbound to 80/443 only, no SSH, no root login, IMDSv2 required,
- * kernel hardened, automatic security updates, encrypted storage.
- *
- * What you run inside is out of scope. Point it at your workload — Claude
- * Code, a Python worker, a Rust daemon — via a systemd unit added in your
- * own user-data extension or via SSM Run Command after deploy.
+ * One EC2 instance, reachable from the Claude iOS app via SSM. First
+ * boot installs tmux + Node + Claude Code so the operator can SSM in,
+ * start a named tmux session, and begin working. Hardening defaults
+ * (SSM-only access, root locked, IMDSv2, kernel sysctl, encrypted
+ * EBS, outbound to 80/443 only) are sensible starting points but not
+ * an authority-reviewed security posture — regenerate for your own
+ * context before trusting them anywhere real.
  */
-export class AgentRuntimeStack extends cdk.Stack {
+export class RemoteCodingCompanionStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
@@ -93,6 +92,20 @@ export class AgentRuntimeStack extends cdk.Stack {
 
       // SSM agent ships on Amazon Linux 2023 but confirm it's running.
       "systemctl enable --now amazon-ssm-agent",
+
+      // tmux for persistent sessions that survive SSM disconnects.
+      "dnf -y install tmux",
+
+      // Node 20 for Claude Code.
+      "curl -fsSL https://rpm.nodesource.com/setup_20.x | bash -",
+      "dnf -y install nodejs",
+
+      // Claude Code installed for the agent user. npm prefix in the
+      // user's home keeps tools out of /usr/local and under the agent.
+      "sudo -u agent mkdir -p /home/agent/.npm-global",
+      "sudo -u agent npm config set prefix /home/agent/.npm-global",
+      "sudo -u agent npm install -g @anthropic-ai/claude-code",
+      "echo 'export PATH=/home/agent/.npm-global/bin:$PATH' >> /home/agent/.bashrc",
     );
 
     // EC2 instance. t4g.small is cheap and plenty for most agent workloads.

@@ -28,7 +28,7 @@ Each folder is a standalone example. Pick the one that matches the post you're r
 
 | Folder | Post | What it shows |
 |--------|------|---------------|
-| [`004-agent-runtime/`](./004-agent-runtime/) | The box is the trust boundary | Minimal CDK stack for a hardened EC2 instance that runs autonomous processes. SSM-only access, no SSH, root locked, IMDSv2, kernel hardening. |
+| [`004-remote-coding-companion/`](./004-remote-coding-companion/) | I built a product from my phone | Minimum cloud setup to run Claude Code on a box you own, reachable from the Claude iOS app. EC2 + SSM + tmux + Claude Code. |
 
 Folders are numbered to match the post index. Each folder is self-contained — separate `package.json`, separate CDK app, separate deploy.
 
