@@ -7,9 +7,8 @@ Companion to the post *I built a product from my phone* on
 > professional. The hardening flags here are sensible defaults the
 > AI agent generated for me, not a reviewed security posture. See
 > the repo [README](../README.md#disclaimer) for the full disclaimer.
-> For a serious, multi-user, actively-maintained self-hostable
-> autonomous-agent runtime, look at **OpenClaw**. What's here is the
-> minimum kit I actually run.
+> What's here is the minimum kit I actually run — not a production
+> platform.
 
 The minimum cloud setup to run Claude Code on a box you own,
 reachable from the Claude iOS app. One EC2 instance. Hardened
@@ -34,9 +33,6 @@ installed on first boot.
 
 - **Not a production platform.** It's a starting kit you can have
   running in an afternoon.
-- **Not a substitute for OpenClaw.** If you want a mature
-  self-hostable autonomous-agent runtime with real multi-user,
-  monitoring, and community support, go there.
 - **Not security-reviewed for shared use.** Single operator, single
   AWS account. Running this with other people's credentials or on
   behalf of a team needs more.
@@ -119,8 +115,7 @@ threat model:
   workload, immutable infrastructure via AutoScaling Group with
   instance refresh.
 
-None of this is exhaustive. OpenClaw is a good reference for what a
-production-grade version looks like.
+None of this is exhaustive.
 
 ## Destroy
 
